@@ -18,3 +18,4 @@ module.exports = {
 
 # web
 在打开站点时，调用接口读取git log并输出到页面
+[demo](https://github.com/MakerGYT/wehook-demo)

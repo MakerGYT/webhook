@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - "lts/*"
+dist: xenial
+services:
+  - mysql
+script:
+  - npm run dev

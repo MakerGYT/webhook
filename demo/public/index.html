@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>test</title>
+  <meta charset="UTF-8">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <form>
+    <input placeholder="输入名称查询" id="name" name="name">
+    <button type="sumbit" class="btn btn-info" id="search">查询</button>
+  </form>
+  <div id="checkBoxList">
+    <table id="tb" class="table table-bordered table-hover" border="1" cellspacing="0" cellpadding="1">
+      <thead class="info">
+        <th>id</th>
+        <th>名称</th>
+        <th>库存</th>
+        <th>最后更新时间</th>
+        <th>选择</th>
+      </thead>
+      <tbody id="tbody">
+
+      </tbody>
+    </table>
+    <div class="button">
+      <button class="btn btn-primary btn-sm" id="check_all">全选</button>
+      <button class="btn btn-primary btn-sm" id="cancel">取消全选</button>
+      <button class="btn btn-primary btn-sm" id="back">反选</button>
+      <button class="btn btn-primary btn-sm" id="checkdelete">选择删除</button>
+    </div>
+
+  </div>
+  <hr>
+  <ul id="message">
+  </ul>
+  <hr>
+  <p id="test">test webhook53</p>
+</body>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $.ajax({
+      url: "/show",
+      type: "GET",
+      success: function (res) {
+        var html = "";
+        console.log(res);
+        var data = res.list;
+        for (var i = 0; i < data.length; i++) {
+          html +=
+            `<tr>
+                  <td>${data[i].id}</td>
+                  <td>${data[i].name}</td>
+                  <td>${data[i].remainder}</td>
+                  <td>${data[i].time}</td>
+                  <td>
+                    <input type="checkbox" name="check" >
+                  </td>
+              </tr>`;
+        }
+        $('#tbody').html(html);
+        $('#test').html(`
+        <code>
+          <span>clientIp: ${res.clientIp}</span><br>
+          <span>${JSON.stringify(res.commit)}</span><br>
+        </code>
+          `);
+      }
+    });
+  });
+</script>
+<script src="https://cdn-hangzhou.goeasy.io/goeasy.js"></script>
+<script>
+  var goEasy = new GoEasy({
+    appkey: "BC-7ea8962a027c4dd693412f85534bbcde"
+  });
+  goEasy.subscribe({
+    channel: "c4aae4da-2bae-4b62-91b9-30e76858493c",
+    onSuccess: function () {
+      alert("Subscribe the Channel successfully.");
+    },
+    onFailed: function (error) {
+      alert("Subscribe the Channel failed, error code:" + error.code + " error message: " + error.content);
+    },
+    onMessage: function (message) {
+      $("#message").append("<li><code>" + new Date() + message.channel + "</code><br>" + message.content + "</li>");
+    }
+  });
+  goEasy.publish({
+    channel: "c4aae4da-2bae-4b62-91b9-30e76858493c",
+    message: 'confirm',
+    onSuccess: function () {
+
+    },
+    onFailed: function (error) {
+      console.log(error);
+    }
+  });
+</script>
+
+</html>
